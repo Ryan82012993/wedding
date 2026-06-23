@@ -1,4 +1,5 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import "./App.css";
 import {
   Container,
   Typography,
@@ -82,6 +83,63 @@ const theme = createTheme({
 });
 
 function App() {
+  const [petals, setPetals] = useState(() => {
+    const width = typeof window !== 'undefined' ? window.innerWidth : 1000;
+    const fallingCount = Math.floor(width / 25);
+    return [...Array(fallingCount)].map(() => ({
+      left: `${Math.random() * 100}%`,
+      '--fall-duration': `${Math.random() * 4 + 4}s`,
+      '--sway-duration': `${Math.random() * 2 + 2}s`,
+      '--fall-delay': `${Math.random() * 5}s`,
+      '--sway-delay': `${Math.random() * 5}s`,
+      width: `${Math.random() * 10 + 10}px`,
+      height: `${Math.random() * 10 + 10}px`,
+    }));
+  });
+
+  const [accumulatedPetals, setAccumulatedPetals] = useState(() => {
+    const width = typeof window !== 'undefined' ? window.innerWidth : 1000;
+    const accumulatedCount = Math.floor(width / 6);
+    return [...Array(accumulatedCount)].map(() => ({
+      left: `${Math.random() * 100}%`,
+      bottom: `${Math.random() * 30 - 10}px`,
+      transform: `rotate(${Math.random() * 360}deg)`,
+      width: `${Math.random() * 12 + 10}px`,
+      height: `${Math.random() * 12 + 10}px`,
+      opacity: Math.random() * 0.4 + 0.6,
+    }));
+  });
+
+  useEffect(() => {
+    const calculatePetalCount = () => {
+      const width = window.innerWidth;
+      const fallingCount = Math.floor(width / 25);
+      const accumulatedCount = Math.floor(width / 6);
+      
+      setPetals([...Array(fallingCount)].map(() => ({
+        left: `${Math.random() * 100}%`,
+        '--fall-duration': `${Math.random() * 4 + 4}s`,
+        '--sway-duration': `${Math.random() * 2 + 2}s`,
+        '--fall-delay': `${Math.random() * 5}s`,
+        '--sway-delay': `${Math.random() * 5}s`,
+        width: `${Math.random() * 10 + 10}px`,
+        height: `${Math.random() * 10 + 10}px`,
+      })));
+
+      setAccumulatedPetals([...Array(accumulatedCount)].map(() => ({
+        left: `${Math.random() * 100}%`,
+        bottom: `${Math.random() * 30 - 10}px`,
+        transform: `rotate(${Math.random() * 360}deg)`,
+        width: `${Math.random() * 12 + 10}px`,
+        height: `${Math.random() * 12 + 10}px`,
+        opacity: Math.random() * 0.4 + 0.6,
+      })));
+    };
+
+    window.addEventListener('resize', calculatePetalCount);
+    return () => window.removeEventListener('resize', calculatePetalCount);
+  }, []);
+
   const [name, setName] = useState("");
   const [guests, setGuests] = useState("");
   const [open, setOpen] = useState(false);
@@ -143,10 +201,6 @@ function App() {
       <Box
         sx={{
           minHeight: "100vh",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-          py: 4,
           // A festive red gradient background
           background: "linear-gradient(135deg, #fff0f0 0%, #ffebee 100%)",
           position: "relative",
@@ -179,17 +233,61 @@ function App() {
           }}
         />
 
-        <Container maxWidth="sm" sx={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", gap: 4 }}>
+        {/* 第一张照片全屏显示 */}
+        <Box
+          sx={{
+            width: "100%",
+            height: "100vh",
+            backgroundColor: "transparent",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            position: "relative",
+            overflow: "hidden",
+            borderBottom: "2px dashed #ffcdd2",
+            color: "#d32f2f",
+          }}
+        >
+          <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', overflow: 'hidden', zIndex: 0 }}>
+            {/* 飘落的花瓣 */}
+            {petals.map((style, i) => (
+              <Box
+                key={`fall-${i}`}
+                className="petal"
+                sx={style}
+              />
+            ))}
+            {/* 底部堆积的花瓣 */}
+            {accumulatedPetals.map((style, i) => (
+              <Box
+                key={`acc-${i}`}
+                sx={{
+                  position: 'absolute',
+                  background: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)',
+                  borderRadius: '15px 0px 15px 0px',
+                  ...style
+                }}
+              />
+            ))}
+          </Box>
+          <Typography variant="body1" sx={{ fontWeight: "bold", letterSpacing: 1, textAlign: "center", zIndex: 1 }}>
+            照片预留位 1
+            <br/>
+            <span style={{ fontSize: "0.8rem", fontWeight: "normal" }}>(建议竖版照片)</span>
+          </Typography>
+        </Box>
+
+        <Container maxWidth="sm" sx={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", gap: 4, py: 4 }}>
           
-          {/* 照片预留位置 (从上到下排列，每一张单独一块) */}
-          {[1, 2, 3].map((item) => (
+          {/* 照片预留位置 2 和 3 */}
+          {[2, 3].map((item) => (
             <Paper
               key={item}
               elevation={0}
               sx={{
                 width: "100%",
                 height: { xs: 450, sm: 600 },
-                backgroundColor: "rgba(255, 255, 255, 0.8)",
+                backgroundColor: "transparent",
                 backdropFilter: "blur(10px)",
                 border: "2px dashed #ffcdd2",
                 borderRadius: 4,
@@ -202,7 +300,7 @@ function App() {
                 boxShadow: "0 10px 40px rgba(211,47,47,0.1)",
               }}
             >
-              <Typography variant="body1" sx={{ fontWeight: "bold", letterSpacing: 1, textAlign: "center" }}>
+              <Typography variant="body1" sx={{ fontWeight: "bold", letterSpacing: 1, textAlign: "center", zIndex: 1 }}>
                 照片预留位 {item}
                 <br/>
                 <span style={{ fontSize: "0.8rem", fontWeight: "normal" }}>(建议竖版照片)</span>
