@@ -84,21 +84,21 @@ const theme = createTheme({
 
 function App() {
   const [petals, setPetals] = useState(() => {
-    const width = typeof window !== 'undefined' ? window.innerWidth : 1000;
+    const width = typeof window !== "undefined" ? window.innerWidth : 1000;
     const fallingCount = Math.floor(width / 25);
     return [...Array(fallingCount)].map(() => ({
       left: `${Math.random() * 100}%`,
-      '--fall-duration': `${Math.random() * 4 + 4}s`,
-      '--sway-duration': `${Math.random() * 2 + 2}s`,
-      '--fall-delay': `${Math.random() * 5}s`,
-      '--sway-delay': `${Math.random() * 5}s`,
+      "--fall-duration": `${Math.random() * 4 + 4}s`,
+      "--sway-duration": `${Math.random() * 2 + 2}s`,
+      "--fall-delay": `${Math.random() * 5}s`,
+      "--sway-delay": `${Math.random() * 5}s`,
       width: `${Math.random() * 10 + 10}px`,
       height: `${Math.random() * 10 + 10}px`,
     }));
   });
 
   const [accumulatedPetals, setAccumulatedPetals] = useState(() => {
-    const width = typeof window !== 'undefined' ? window.innerWidth : 1000;
+    const width = typeof window !== "undefined" ? window.innerWidth : 1000;
     const accumulatedCount = Math.floor(width / 6);
     return [...Array(accumulatedCount)].map(() => ({
       left: `${Math.random() * 100}%`,
@@ -115,29 +115,33 @@ function App() {
       const width = window.innerWidth;
       const fallingCount = Math.floor(width / 25);
       const accumulatedCount = Math.floor(width / 6);
-      
-      setPetals([...Array(fallingCount)].map(() => ({
-        left: `${Math.random() * 100}%`,
-        '--fall-duration': `${Math.random() * 4 + 4}s`,
-        '--sway-duration': `${Math.random() * 2 + 2}s`,
-        '--fall-delay': `${Math.random() * 5}s`,
-        '--sway-delay': `${Math.random() * 5}s`,
-        width: `${Math.random() * 10 + 10}px`,
-        height: `${Math.random() * 10 + 10}px`,
-      })));
 
-      setAccumulatedPetals([...Array(accumulatedCount)].map(() => ({
-        left: `${Math.random() * 100}%`,
-        bottom: `${Math.random() * 30 - 10}px`,
-        transform: `rotate(${Math.random() * 360}deg)`,
-        width: `${Math.random() * 12 + 10}px`,
-        height: `${Math.random() * 12 + 10}px`,
-        opacity: Math.random() * 0.4 + 0.6,
-      })));
+      setPetals(
+        [...Array(fallingCount)].map(() => ({
+          left: `${Math.random() * 100}%`,
+          "--fall-duration": `${Math.random() * 4 + 4}s`,
+          "--sway-duration": `${Math.random() * 2 + 2}s`,
+          "--fall-delay": `${Math.random() * 5}s`,
+          "--sway-delay": `${Math.random() * 5}s`,
+          width: `${Math.random() * 10 + 10}px`,
+          height: `${Math.random() * 10 + 10}px`,
+        })),
+      );
+
+      setAccumulatedPetals(
+        [...Array(accumulatedCount)].map(() => ({
+          left: `${Math.random() * 100}%`,
+          bottom: `${Math.random() * 30 - 10}px`,
+          transform: `rotate(${Math.random() * 360}deg)`,
+          width: `${Math.random() * 12 + 10}px`,
+          height: `${Math.random() * 12 + 10}px`,
+          opacity: Math.random() * 0.4 + 0.6,
+        })),
+      );
     };
 
-    window.addEventListener('resize', calculatePetalCount);
-    return () => window.removeEventListener('resize', calculatePetalCount);
+    window.addEventListener("resize", calculatePetalCount);
+    return () => window.removeEventListener("resize", calculatePetalCount);
   }, []);
 
   const [name, setName] = useState("");
@@ -145,14 +149,14 @@ function App() {
   const [open, setOpen] = useState(false);
   const [message, setMessage] = useState("");
   const [severity, setSeverity] = useState("success");
-  
+
   // Validation state
   const [nameError, setNameError] = useState("");
   const [guestsError, setGuestsError] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
+
     // Custom Validation
     let isValid = true;
     if (!name.trim()) {
@@ -248,37 +252,64 @@ function App() {
             color: "#d32f2f",
           }}
         >
-          <Box sx={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', pointerEvents: 'none', overflow: 'hidden', zIndex: 0 }}>
+          <Box
+            sx={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              width: "100%",
+              height: "100%",
+              pointerEvents: "none",
+              overflow: "hidden",
+              zIndex: 0,
+            }}
+          >
             {/* 飘落的花瓣 */}
             {petals.map((style, i) => (
-              <Box
-                key={`fall-${i}`}
-                className="petal"
-                sx={style}
-              />
+              <Box key={`fall-${i}`} className="petal" sx={style} />
             ))}
             {/* 底部堆积的花瓣 */}
             {accumulatedPetals.map((style, i) => (
               <Box
                 key={`acc-${i}`}
                 sx={{
-                  position: 'absolute',
-                  background: 'linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)',
-                  borderRadius: '15px 0px 15px 0px',
-                  ...style
+                  position: "absolute",
+                  background:
+                    "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)",
+                  borderRadius: "15px 0px 15px 0px",
+                  ...style,
                 }}
               />
             ))}
           </Box>
-          <Typography variant="body1" sx={{ fontWeight: "bold", letterSpacing: 1, textAlign: "center", zIndex: 1 }}>
+          <Typography
+            variant="body1"
+            sx={{
+              fontWeight: "bold",
+              letterSpacing: 1,
+              textAlign: "center",
+              zIndex: 1,
+            }}
+          >
             照片预留位 1
-            <br/>
-            <span style={{ fontSize: "0.8rem", fontWeight: "normal" }}>(建议竖版照片)</span>
+            <br />
+            <span style={{ fontSize: "0.8rem", fontWeight: "normal" }}>
+              (建议竖版照片)
+            </span>
           </Typography>
         </Box>
 
-        <Container maxWidth="sm" sx={{ position: "relative", zIndex: 1, display: "flex", flexDirection: "column", gap: 4, py: 4 }}>
-          
+        <Container
+          maxWidth="sm"
+          sx={{
+            position: "relative",
+            zIndex: 1,
+            display: "flex",
+            flexDirection: "column",
+            gap: 4,
+            py: 4,
+          }}
+        >
           {/* 照片预留位置 2 和 3 */}
           {[2, 3].map((item) => (
             <Paper
@@ -300,10 +331,20 @@ function App() {
                 boxShadow: "0 10px 40px rgba(211,47,47,0.1)",
               }}
             >
-              <Typography variant="body1" sx={{ fontWeight: "bold", letterSpacing: 1, textAlign: "center", zIndex: 1 }}>
+              <Typography
+                variant="body1"
+                sx={{
+                  fontWeight: "bold",
+                  letterSpacing: 1,
+                  textAlign: "center",
+                  zIndex: 1,
+                }}
+              >
                 照片预留位 {item}
-                <br/>
-                <span style={{ fontSize: "0.8rem", fontWeight: "normal" }}>(建议竖版照片)</span>
+                <br />
+                <span style={{ fontSize: "0.8rem", fontWeight: "normal" }}>
+                  (建议竖版照片)
+                </span>
               </Typography>
             </Paper>
           ))}
@@ -353,17 +394,51 @@ function App() {
               <Divider sx={{ width: "20%", borderColor: "#d32f2f" }} />
             </Box>
 
-            <Typography variant="subtitle1" gutterBottom sx={{ mb: 4 }}>
+            <Typography variant="subtitle1" gutterBottom sx={{ mb: 3 }}>
               诚挚邀请您出席我们的婚礼答谢宴
             </Typography>
 
+            <Box sx={{ mb: 4, textAlign: "left", display: "inline-block" }}>
+              <Typography
+                variant="body1"
+                sx={{
+                  color: "#555",
+                  mb: 1,
+                  display: "flex",
+                  alignItems: "center",
+                }}
+              >
+                <span style={{ fontSize: "1.2rem", marginRight: "8px" }}>
+                  📅
+                </span>
+                <strong>时间：</strong> 9 月 12 日 晚上 18 点
+              </Typography>
+              <Typography
+                variant="body1"
+                sx={{ color: "#555", display: "flex", alignItems: "center" }}
+              >
+                <span style={{ fontSize: "1.2rem", marginRight: "8px" }}>
+                  📍
+                </span>
+                <strong>地点：</strong> 新福彩海鲜酒家
+              </Typography>
+            </Box>
+
             <Divider sx={{ mb: 4, borderColor: "rgba(211,47,47,0.1)" }} />
-            
-            <Typography variant="h6" sx={{ color: "#d32f2f", mb: 2, fontWeight: "bold" }}>
+
+            <Typography
+              variant="h6"
+              sx={{ color: "#d32f2f", mb: 2, fontWeight: "bold" }}
+            >
               期待您的光临
             </Typography>
 
-            <Box component="form" onSubmit={handleSubmit} sx={{ mt: 2 }} noValidate>
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              sx={{ mt: 2 }}
+              noValidate
+            >
               <TextField
                 fullWidth
                 label="宾客姓名 *"
@@ -389,7 +464,7 @@ function App() {
                 value={guests}
                 onChange={(e) => {
                   // 只允许输入数字
-                  const val = e.target.value.replace(/\D/g, '');
+                  const val = e.target.value.replace(/\D/g, "");
                   setGuests(val);
                   if (guestsError) setGuestsError("");
                 }}
