@@ -160,7 +160,7 @@ function App() {
     // Custom Validation
     let isValid = true;
     if (!name.trim()) {
-      setNameError("麻烦您留下尊姓大名哦～");
+      setNameError("麻烦您留下姓名哦～");
       isValid = false;
     }
     if (!guests || parseInt(guests, 10) < 1) {
