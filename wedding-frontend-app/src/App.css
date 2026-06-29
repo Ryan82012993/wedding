@@ -289,15 +289,21 @@
 
 .form-input {
   background-color: #fff;
+  margin-bottom: 8px !important;
 }
 
 .form-input-guests {
   background-color: #fff;
-  margin-bottom: 16px;
+  margin-bottom: 24px !important;
 }
 
 .submit-button {
   margin-top: 8px;
+  min-height: 48px !important;
+  height: 48px !important;
+  font-size: 1rem !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em !important;
 }
 
 /* Snackbar 样式 */
@@ -328,4 +334,61 @@
 .ticks::after {
   right: 0;
   border-right-color: var(--border);
+}
+
+/* 音乐控制按钮 - 爱心音符样式 - 婚礼主题 */
+.music-disc-wrapper {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 1000;
+  cursor: pointer;
+  width: 50px;
+  height: 50px;
+  transition: transform 0.3s ease;
+  animation: pulse 1.5s ease-in-out infinite;
+  animation-play-state: paused;
+}
+
+.music-disc-wrapper.playing {
+  animation-play-state: running;
+}
+
+.music-disc-wrapper.paused {
+  animation-play-state: paused;
+  transform: scale(1);
+}
+
+.music-disc {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  background: transparent;
+  border: none;
+  box-shadow: none;
+}
+
+.music-disc img {
+  width: 60%;
+  height: auto;
+  display: block;
+}
+
+.music-disc::after,
+.music-disc::before,
+.music-disc-center {
+  display: none;
+}
+
+/* 匀速跳动动画 */
+@keyframes pulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
 }

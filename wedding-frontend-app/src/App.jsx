@@ -1,6 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import img1 from "./images/img1.jpg";
+// TODO: 将背景音乐文件放入 public 目录后，修改下面的路径
+// 例如：将 wedding-music.mp3 放入 wedding-frontend-app/public/ 目录
+const MUSIC_PATH = "/wedding-music.mp3"; // 占位符路径，请替换为实际音乐文件
 import {
   Container,
   Typography,
@@ -84,6 +87,17 @@ const theme = createTheme({
 });
 
 function App() {
+  // 背景音乐 - 页面加载时自动播放，循环播放
+  const audioRef = useRef(null);
+
+  useEffect(() => {
+    if (audioRef.current) {
+      audioRef.current.play().catch(err => {
+        console.error("自动播放失败，需要用户交互:", err);
+      });
+    }
+  }, []);
+
   const [petals, setPetals] = useState(() => {
     const width = typeof window !== "undefined" ? window.innerWidth : 1000;
     const fallingCount = Math.floor(width / 25);
@@ -202,6 +216,9 @@ function App() {
     <ThemeProvider theme={theme}>
       <CssBaseline />
       <Box className="app-container">
+        {/* 背景音乐元素 - 自动播放，循环播放 */}
+        <audio ref={audioRef} src={MUSIC_PATH} loop />
+
         <Box className="bg-decoration-1" />
         <Box className="bg-decoration-2" />
 
@@ -290,7 +307,7 @@ function App() {
                 label="宾客姓名 *"
                 placeholder="请输入您的姓名"
                 variant="outlined"
-                margin="normal"
+                margin="dense"
                 value={name}
                 onChange={(e) => {
                   setName(e.target.value);
