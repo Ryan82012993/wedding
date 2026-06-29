@@ -61,7 +61,7 @@ npm install
 npm run dev
 ```
 
-前端服务将在 `http://localhost:5173` 启动（Vite 默认端口）。
+前端服务将在 `http://localhost:8081` 启动。
 
 ### 生产环境部署
 
@@ -72,7 +72,7 @@ cd wedding-frontend-app
 npm run build
 ```
 
-构建产物将输出到 `dist/` 目录。
+构建产物将直接输出到 `wedding-backend/src/main/resources/static/` 目录，由 Spring Boot 统一提供访问。
 
 #### 后端打包
 
@@ -109,7 +109,11 @@ server.port=8080
 
 ### 前端配置
 
-前端代理配置位于 `wedding-frontend-app/vite.config.js`，默认会代理到后端 `http://localhost:8080`。
+前端代理配置位于 `wedding-frontend-app/vite.config.js`：
+
+- 开发模式：前端运行在 `http://localhost:8081`
+- `/api` 请求代理到后端 `http://127.0.0.1:8080`
+- 构建模式：静态文件输出到后端 `static` 目录
 
 ## API 接口
 
@@ -193,41 +197,48 @@ const theme = createTheme({
 
 ### 方案一：使用内网穿透工具（推荐，简单快捷）
 
+当前项目推荐使用单地址部署：
+
+1. 前端先构建到后端静态目录
+2. 启动 Spring Boot
+3. natapp 只暴露后端 `8080`
+
+这样外网访问同一个公网地址时：
+
+- 页面由 Spring Boot 返回
+- `/api/rsvps` 也由同一个 Spring Boot 处理
+
+不需要再为前端和后端分别开两个隧道
+
 #### 使用 Ngrok
 
 1. **安装 Ngrok**
    - 访问 [https://ngrok.com](https://ngrok.com) 注册并下载客户端
    - 或使用国内替代品如 [natapp](https://natapp.cn)
 
-2. **启动后端穿透**
+2. **构建前端并启动后端**
+   ```bash
+   cd wedding-frontend-app
+   npm install
+   npm run build
+
+   cd ../wedding-backend
+   mvn spring-boot:run
+   ```
+
+3. **启动后端穿透**
    ```bash
    # 启动后端后，在新终端运行
    ngrok http 8080
    ```
    记下生成的公网 URL（如 `https://abc123.ngrok.io`）
 
-3. **修改后端配置**
+4. **修改后端配置**
    
    编辑 `wedding-backend/src/main/resources/application.properties`，添加：
    ```properties
    # 允许跨域访问
    server.address=0.0.0.0
-   ```
-
-4. **构建并部署前端**
-   ```bash
-   cd wedding-frontend-app
-   npm run build
-   ```
-
-5. **使用 Ngrok 暴露前端**
-   ```bash
-   # 方式 A：直接托管 dist 目录
-   ngrok http ./dist
-   
-   # 方式 B：使用 Vite Preview
-   npm run preview -- --host 0.0.0.0
-   ngrok http 4173
    ```
 
 ### 方案二：部署到云服务器（适合长期使用）
