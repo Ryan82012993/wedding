@@ -115,6 +115,32 @@ server.port=8080
 - `/api` 请求代理到后端 `http://127.0.0.1:8080`
 - 构建模式：静态文件输出到后端 `static` 目录
 
+### 微信分享配置
+
+如果要在微信里支持“发送给朋友 / 分享到朋友圈”，需要先准备公众号配置：
+
+1. 认证服务号或具备 JS-SDK 能力的公众号
+2. 在微信公众平台配置 `JS接口安全域名`
+3. 把你的公网访问域名加入安全域名，例如 `v2aeb4c4.natappfree.cc`
+
+启动后端前，设置这些环境变量：
+
+```bash
+export WECHAT_APP_ID=你的公众号AppID
+export WECHAT_APP_SECRET=你的公众号AppSecret
+export WECHAT_SHARE_TITLE='何建峰 & 周婉情答谢宴邀请函'
+export WECHAT_SHARE_DESCRIPTION='诚邀您参加我们的婚礼答谢宴，点击查看详情并回复出席信息。'
+export WECHAT_SHARE_LINK='https://你的公网域名'
+export WECHAT_SHARE_IMAGE_URL='https://你的公网域名/favicon.svg'
+```
+
+说明：
+
+- 页面必须通过你配置到公众号后台的公网域名访问
+- 微信分享只会在微信内置浏览器中生效
+- 如果不设置 `WECHAT_SHARE_LINK`，默认分享当前页面地址
+- 如果不设置 `WECHAT_SHARE_IMAGE_URL`，建议至少提供一个公网可访问的图片地址
+
 ## API 接口
 
 ### RSVP 相关接口

@@ -1,4 +1,8 @@
+com/wedding/backend/dto/WechatShareConfigResponse.class
 com/wedding/backend/controller/RsvpController.class
 com/wedding/backend/WeddingBackendApplication.class
+com/wedding/backend/service/WechatService$CachedValue.class
+com/wedding/backend/service/WechatService.class
+com/wedding/backend/controller/WechatController.class
 com/wedding/backend/repository/RsvpRepository.class
 com/wedding/backend/model/Rsvp.class

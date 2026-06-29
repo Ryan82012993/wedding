@@ -20,6 +20,9 @@ import {
 } from "@mui/material";
 import axios from "axios";
 
+const WECHAT_SDK_URL = "https://res.wx.qq.com/open/js/jweixin-1.6.0.js";
+const getWechatSdk = () => window.wx;
+
 const theme = createTheme({
   palette: {
     primary: {
@@ -89,6 +92,7 @@ const theme = createTheme({
 function App() {
   // 背景音乐 - 页面加载时自动播放，循环播放
   const audioRef = useRef(null);
+  const [wechatReady, setWechatReady] = useState(false);
 
   useEffect(() => {
     if (audioRef.current) {
@@ -96,6 +100,93 @@ function App() {
         console.error("自动播放失败，需要用户交互:", err);
       });
     }
+  }, []);
+
+  useEffect(() => {
+    const isWechatBrowser = /micromessenger/i.test(window.navigator.userAgent);
+    if (!isWechatBrowser) {
+      return undefined;
+    }
+
+    let isUnmounted = false;
+
+    const loadWechatSdk = () =>
+      new Promise((resolve, reject) => {
+        if (getWechatSdk()) {
+          resolve(getWechatSdk());
+          return;
+        }
+
+        const existingScript = document.querySelector(`script[src="${WECHAT_SDK_URL}"]`);
+        if (existingScript) {
+          existingScript.addEventListener("load", () => resolve(getWechatSdk()), { once: true });
+          existingScript.addEventListener("error", reject, { once: true });
+          return;
+        }
+
+        const script = document.createElement("script");
+        script.src = WECHAT_SDK_URL;
+        script.async = true;
+        script.onload = () => resolve(getWechatSdk());
+        script.onerror = reject;
+        document.head.appendChild(script);
+      });
+
+    const setupWechatShare = async () => {
+      try {
+        const wx = await loadWechatSdk();
+        const { data } = await axios.get("/api/wechat/share-config", {
+          params: {
+            url: window.location.href,
+          },
+        });
+
+        if (!wx || isUnmounted) {
+          return;
+        }
+
+        wx.config({
+          debug: false,
+          appId: data.appId,
+          timestamp: data.timestamp,
+          nonceStr: data.nonceStr,
+          signature: data.signature,
+          jsApiList: ["updateAppMessageShareData", "updateTimelineShareData"],
+        });
+
+        wx.ready(() => {
+          const sharePayload = {
+            title: data.title,
+            desc: data.description,
+            link: data.link,
+            imgUrl: data.imageUrl,
+          };
+
+          wx.updateAppMessageShareData(sharePayload);
+          wx.updateTimelineShareData({
+            title: data.title,
+            link: data.link,
+            imgUrl: data.imageUrl,
+          });
+
+          if (!isUnmounted) {
+            setWechatReady(true);
+          }
+        });
+
+        wx.error((error) => {
+          console.error("微信分享初始化失败:", error);
+        });
+      } catch (error) {
+        console.error("加载微信分享配置失败:", error);
+      }
+    };
+
+    setupWechatShare();
+
+    return () => {
+      isUnmounted = true;
+    };
   }, []);
 
   const [petals, setPetals] = useState(() => {
@@ -278,6 +369,12 @@ function App() {
             <Typography variant="subtitle1" className="invitation-text">
               诚挚邀请您出席我们的婚礼答谢宴
             </Typography>
+
+            {wechatReady && (
+              <Typography className="wechat-share-tip">
+                点击右上角，即可转发邀请函给亲友
+              </Typography>
+            )}
 
             <Box className="info-box">
               <Typography className="info-row">

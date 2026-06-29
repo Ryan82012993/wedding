@@ -235,6 +235,13 @@
   color: #d32f2f;
 }
 
+.wechat-share-tip {
+  margin-bottom: 14px !important;
+  color: #9a3030;
+  font-size: 0.95rem !important;
+  letter-spacing: 0.03em;
+}
+
 /* 时间地点信息 */
 .info-box {
   margin-bottom: 20px;
