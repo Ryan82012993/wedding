@@ -1,0 +1,4 @@
+com/wedding/backend/controller/RsvpController.class
+com/wedding/backend/WeddingBackendApplication.class
+com/wedding/backend/repository/RsvpRepository.class
+com/wedding/backend/model/Rsvp.class
