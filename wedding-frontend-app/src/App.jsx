@@ -206,9 +206,17 @@ function App() {
         <Box className="bg-decoration-2" />
 
         <Box className="hero-section">
-          <img src={img1} alt="新郎新娘撒花背景" className="hero-background-image" />
+          <img
+            src={img1}
+            alt="新郎新娘撒花背景"
+            className="hero-background-image"
+          />
           <Box className="hero-overlay" />
-          <img src={img1} alt="新郎新娘撒花" className="hero-foreground-image" />
+          <img
+            src={img1}
+            alt="新郎新娘撒花"
+            className="hero-foreground-image"
+          />
           <Box className="petal-container">
             {petals.map((style, i) => (
               <Box key={`fall-${i}`} className="petal" sx={style} />
@@ -218,7 +226,8 @@ function App() {
                 key={`acc-${i}`}
                 sx={{
                   position: "absolute",
-                  background: "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)",
+                  background:
+                    "linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%)",
                   borderRadius: "15px 0px 15px 0px",
                   ...style,
                 }}
@@ -239,11 +248,7 @@ function App() {
           ))}
 
           <Paper className="invitation-card">
-            <Typography className="invitation-title-en">
-              WEDDING BANQUET
-            </Typography>
-
-            <Typography variant="h3" component="h1" className="invitation-title-cn">
+            <Typography className="invitation-title-cn">
               答谢宴邀请函
             </Typography>
 
@@ -274,7 +279,12 @@ function App() {
               期待您的光临
             </Typography>
 
-            <Box component="form" onSubmit={handleSubmit} className="rsvp-form" noValidate>
+            <Box
+              component="form"
+              onSubmit={handleSubmit}
+              className="rsvp-form"
+              noValidate
+            >
               <TextField
                 fullWidth
                 label="宾客姓名 *"

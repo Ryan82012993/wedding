@@ -15,6 +15,11 @@
   height: 200px;
   border-radius: 50%;
   background: radial-gradient(circle, rgba(211, 47, 47, 0.1) 0%, rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(
+    circle,
+    rgba(211, 47, 47, 0.1) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
 }
 
 .bg-decoration-2 {
@@ -24,7 +29,11 @@
   width: 300px;
   height: 300px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(255, 179, 0, 0.15) 0%, rgba(255, 255, 255, 0) 70%);
+  background: radial-gradient(
+    circle,
+    rgba(255, 179, 0, 0.15) 0%,
+    rgba(255, 255, 255, 0) 70%
+  );
 }
 
 /* 全屏英雄图片区域 */
@@ -188,19 +197,12 @@
 }
 
 /* 标题样式 */
-.invitation-title-en {
-  color: #d32f2f;
-  margin-bottom: 4px;
-  font-family: 'Helvetica Neue', sans-serif;
-  letter-spacing: 2px;
-  font-weight: bold;
-}
-
 .invitation-title-cn {
-  color: #d32f2f;
-  font-style: italic;
-  font-weight: 600;
-  letter-spacing: 0.05em;
+  color: #d32f2f !important;
+  font-style: italic !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.05em !important;
+  font-size: 1.8rem !important;
 }
 
 /* 装饰分隔符 */
@@ -236,21 +238,41 @@
 
 /* 时间地点信息 */
 .info-box {
-  margin-bottom: 16px;
-  text-align: left;
-  display: inline-block;
+  margin-bottom: 20px;
+  text-align: center;
+  display: block;
+  background: linear-gradient(
+    135deg,
+    rgba(255, 240, 240, 0.8) 0%,
+    rgba(255, 235, 238, 0.8) 100%
+  );
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid rgba(211, 47, 47, 0.2);
 }
 
 .info-row {
-  color: #555;
-  margin-bottom: 4px;
+  color: #d32f2f;
+  font-size: 1.1rem;
+  font-weight: 600;
+  margin-bottom: 10px;
   display: flex;
   align-items: center;
+  justify-content: center;
+}
+
+.info-row:last-child {
+  margin-bottom: 0;
 }
 
 .info-emoji {
-  font-size: 1.2rem;
-  margin-right: 8px;
+  font-size: 1.4rem;
+  margin-right: 10px;
+}
+
+.info-label {
+  font-weight: bold;
+  margin-right: 4px;
 }
 
 /* 期待光临标题 */
@@ -293,7 +315,7 @@
 
 .ticks::before,
 .ticks::after {
-  content: '';
+  content: "";
   position: absolute;
   top: -4.5px;
   border: 5px solid transparent;
